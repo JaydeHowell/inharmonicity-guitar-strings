@@ -10,9 +10,11 @@ from inharmonicity.constants import (
     WINDOW_SIZE,
     )
 
-def sanitize(wav_directory: Path) -> None:
+def sanitize(wav_directory: Path) -> int:
     import_directory = wav_directory / "raw"
     export_directory = wav_directory / "sanitized"
+
+    count = 0
 
     for file in import_directory.iterdir():
         if file.suffix == ".wav":
@@ -37,3 +39,6 @@ def sanitize(wav_directory: Path) -> None:
             windowed_signal = data_slice * window
 
             sio.wavfile.write(export_directory / f"{file.stem}_sanitized.wav", SAMPLE_RATE, windowed_signal.astype(np.float32))
+            count += 1
+
+    return count
