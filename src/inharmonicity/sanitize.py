@@ -4,16 +4,15 @@ import scipy.io as sio
 from scipy.signal.windows import hann
 import numpy as np
 
-from system.paths import get_project_root
+from constants import (
+    SAMPLE_RATE,
+    BUFFER,
+    WINDOW_SIZE,
+    )
 
-SAMPLE_RATE = 48000
-BUFFER = 4800 # 100ms
-WINDOW_SIZE = 4096
-
-root_dir = get_project_root()
-wav_directory = root_dir / "wav_files"
-import_directory = wav_directory / "raw"
-export_directory = wav_directory / "sanitized"
+def sanitize(wav_directory: Path) -> None:
+    import_directory = wav_directory / "raw"
+    export_directory = wav_directory / "sanitized"
 
 for file in import_directory.iterdir():
     if file.suffix == ".wav":
