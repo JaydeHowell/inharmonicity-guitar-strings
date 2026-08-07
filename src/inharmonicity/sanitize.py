@@ -4,7 +4,7 @@ import scipy.io as sio
 from scipy.signal.windows import hann
 import numpy as np
 
-from constants import (
+from inharmonicity.constants import (
     SAMPLE_RATE,
     BUFFER,
     WINDOW_SIZE,
