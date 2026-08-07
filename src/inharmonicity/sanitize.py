@@ -15,9 +15,6 @@ wav_directory = root_dir / "wav_files"
 import_directory = wav_directory / "raw"
 export_directory = wav_directory / "sanitized"
 
-wav_list = []
-t_0 = 0
-
 for file in import_directory.iterdir():
     if file.suffix == ".wav":
         sample_rate, data = sio.wavfile.read(file)
