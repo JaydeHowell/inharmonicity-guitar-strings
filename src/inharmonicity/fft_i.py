@@ -19,34 +19,35 @@ def get_fft(wav_directory: Path, window_size) -> list[dict]:
     processing_directory = wav_directory / "sanitized"
 
     for file in processing_directory.iterdir():
-        string_gauge_text = file.stem.split("_")[0]
-        try:
-            string_gauge = float(string_gauge_text) / 100
-        except ValueError:
-            raise ValueError(f"String gauge not found in {file.name}. Ensure file name starts with string gauge.")
+        if file.suffix == ".wav":
+            string_gauge_text = file.stem.split("_")[0]
+            try:
+                string_gauge = float(string_gauge_text) / 100
+            except ValueError:
+                raise ValueError(f"String gauge not found in {file.name}. Ensure file name starts with string gauge.")
 
-        sample_rate, data = sio.wavfile.read(file)
+            sample_rate, data = sio.wavfile.read(file)
 
-        signal_array = rfft(data, n=window_size)
+            signal_array = rfft(data, n=window_size)
 
-        magnitude_array = np.abs(signal_array)
+            magnitude_array = np.abs(signal_array)
 
-        measured_fundamental = _get_fft_peak(FUNDAMENTAL_FREQUENCY, magnitude_array)
-        ideal_harmonic = measured_fundamental * TARGET_HARMONIC
-        measured_harmonic = _get_fft_peak(ideal_harmonic, magnitude_array)
+            measured_fundamental = _get_fft_peak(FUNDAMENTAL_FREQUENCY, magnitude_array)
+            ideal_harmonic = measured_fundamental * TARGET_HARMONIC
+            measured_harmonic = _get_fft_peak(ideal_harmonic, magnitude_array)
 
-        freq_delta = measured_harmonic - ideal_harmonic
+            freq_delta = measured_harmonic - ideal_harmonic
 
-        harmonic_data = {
-            "file": file.name,
-            "string_gauge": string_gauge,
-            "fundamental": measured_fundamental,
-            "ideal_harmonic": ideal_harmonic,
-            "measured_harmonic": measured_harmonic,
-            "delta": freq_delta,
-        }
+            harmonic_data = {
+                "file": file.name,
+                "string_gauge": string_gauge,
+                "fundamental": measured_fundamental,
+                "ideal_harmonic": ideal_harmonic,
+                "measured_harmonic": measured_harmonic,
+                "delta": freq_delta,
+            }
 
-        freq_table.append(harmonic_data)
+            freq_table.append(harmonic_data)
 
     return freq_table
 
