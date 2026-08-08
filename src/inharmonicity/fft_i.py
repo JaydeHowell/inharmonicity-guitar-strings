@@ -13,7 +13,7 @@ from inharmonicity.constants import (
 )
 
 
-def get_fft(wav_directory: Path, window_size):
+def get_fft(wav_directory: Path, window_size) -> list[dict]:
     freq_table = []
 
     processing_directory = wav_directory / "sanitized"
@@ -21,7 +21,7 @@ def get_fft(wav_directory: Path, window_size):
     for file in processing_directory.iterdir():
         try:
             string_gauge = float(file.stem.split("_")[0])
-        except TypeError:
+        except ValueError:
             raise ValueError(f"String gauge not found in {file.name}. Ensure file name starts with string gauge.")
 
         sample_rate, data = sio.wavfile.read(file)
@@ -50,7 +50,7 @@ def get_fft(wav_directory: Path, window_size):
     return freq_table
 
 
-def _get_fft_peak(frequency, magnitude_array):
+def _get_fft_peak(frequency, magnitude_array) -> float:
     floor_value = 1e-10
     clipped_array = np.maximum(magnitude_array, floor_value)
     decibel_array = 20 * np.log10(clipped_array)

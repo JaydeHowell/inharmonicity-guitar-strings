@@ -21,7 +21,7 @@ def sanitize(wav_directory: Path) -> int:
         if file.suffix == ".wav":
             try:
                 string_gauge = float(file.stem.split("_")[0])
-            except TypeError:
+            except ValueError:
                 print(
                     f"Warning: String gauge not found in {file.name}. Ensure file names start with string gauge. Skipping...")
                 continue
