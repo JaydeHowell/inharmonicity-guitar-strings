@@ -25,4 +25,4 @@ def plot_frequencies(frequency_data: list[dict]):
 
     axes.plot(x_curve, ideal_y, color="black", linestyle="dashed")
 
-    plt.show()
+    figure.savefig("inharmonicity_regression.pdf", format="pdf", dpi=300, bbox_inches="tight")
