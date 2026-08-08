@@ -19,8 +19,10 @@ def get_fft(wav_directory: Path, window_size) -> list[dict]:
     processing_directory = wav_directory / "sanitized"
 
     for file in processing_directory.iterdir():
+        string_gauge_text = file.stem.split("_")[0]
         try:
-            string_gauge = float(file.stem.split("_")[0])
+            string_gauge = float(string_gauge_text) / 100 if len(string_gauge_text) == 3 else float(
+                string_gauge_text) / 1000
         except ValueError:
             raise ValueError(f"String gauge not found in {file.name}. Ensure file name starts with string gauge.")
 
