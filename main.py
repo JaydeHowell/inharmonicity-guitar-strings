@@ -1,5 +1,6 @@
 from inharmonicity.sanitize import sanitize
 from inharmonicity.fft_i import get_fft
+from inharmonicity.plot import plot_frequencies
 from system.paths import get_project_root
 
 from inharmonicity.constants import WINDOW_SIZE
@@ -16,6 +17,8 @@ def main():
     print(f"Processed {processed_count} files")
 
     frequency_data = get_fft(wav_directory, WINDOW_SIZE)
+
+    plot_frequencies(frequency_data)
 
 if __name__ == "__main__":
     main()
