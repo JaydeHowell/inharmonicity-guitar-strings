@@ -1,14 +1,15 @@
 from pathlib import Path
 
+import numpy as np
 import scipy.io as sio
 from scipy.signal.windows import hann
-import numpy as np
 
 from inharmonicity.constants import (
     SAMPLE_RATE,
     BUFFER,
     WINDOW_SIZE,
-    )
+)
+
 
 def sanitize(wav_directory: Path) -> int:
     import_directory = wav_directory / "raw"
@@ -18,6 +19,13 @@ def sanitize(wav_directory: Path) -> int:
 
     for file in import_directory.iterdir():
         if file.suffix == ".wav":
+            try:
+                string_gauge = float(file.stem.split("_")[0])
+            except TypeError:
+                print(
+                    f"Warning: String gauge not found in {file.name}. Ensure file names start with string gauge. Skipping...")
+                continue
+
             sample_rate, data = sio.wavfile.read(file)
             if sample_rate != SAMPLE_RATE:
                 raise ValueError(f"sample rate {sample_rate} does not equal the expected {SAMPLE_RATE}")
@@ -38,7 +46,8 @@ def sanitize(wav_directory: Path) -> int:
             window = hann(WINDOW_SIZE, sym=False)
             windowed_signal = data_slice * window
 
-            sio.wavfile.write(export_directory / f"{file.stem}_sanitized.wav", SAMPLE_RATE, windowed_signal.astype(np.float32))
+            sio.wavfile.write(export_directory / f"{file.stem}_sanitized.wav", SAMPLE_RATE,
+                              windowed_signal.astype(np.float32))
             count += 1
 
     return count
