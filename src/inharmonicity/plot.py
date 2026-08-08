@@ -14,6 +14,7 @@ def plot_frequencies(frequency_data: list[dict]):
 
     axes.spines['top'].set_visible(False)
     axes.spines['right'].set_visible(False)
+    axes.set_title("Inharmonicity Deviation on the 4th Harmonic")
 
     leastsq = np.polyfit(x_axis, y_axis, 2)
 
