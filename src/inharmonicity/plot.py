@@ -1,8 +1,16 @@
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 
+from system.paths import get_folder_iteration
 
-def plot_frequencies(frequency_data: list[dict]):
+
+def plot_frequencies(experiment: str, artifact_directory: Path, frequency_data: list[dict]):
+
+    export_directory = artifact_directory / experiment
+    export_directory.mkdir(parents=True, exist_ok=True)
+
     sorted_frequency_data = sorted(frequency_data, key=lambda k: k["string_gauge"])
     x_axis = [g_string["string_gauge"] for g_string in sorted_frequency_data]
     y_axis = [g_string["delta"] for g_string in sorted_frequency_data]
@@ -35,21 +43,17 @@ def plot_frequencies(frequency_data: list[dict]):
     axes_plot.set_title("Inharmonicity Deviation on the 4th Harmonic")
 
     leastsq = np.polyfit(x_axis, y_axis, 2)
-
     poly_function = np.poly1d(leastsq)
 
     x_curve = np.linspace(x_axis[0], x_axis[-1], 100)
-
     ideal_y = poly_function(x_curve)
 
     axes_plot.plot(x_curve, ideal_y, color="black", linestyle="dashed")
 
-    figure_plot.savefig("artifacts/inharmonicity_regression.pdf", format="pdf", dpi=300, bbox_inches="tight")
+    figure_plot.savefig(f"{str(export_directory)}/inharmonicity_regression.pdf", format="pdf", dpi=300, bbox_inches="tight")
 
     figure_table, axes_table = plt.subplots()
-
     axes_table.axis("off")
-
     table = axes_table.table(
         cellText=table_data,
         colLabels=table_labels,
@@ -62,4 +66,4 @@ def plot_frequencies(frequency_data: list[dict]):
     table.set_fontsize(5)
     table.scale(1, 1.5)
 
-    figure_table.savefig("artifacts/inharmonicity_table.pdf", format="pdf", dpi=300, bbox_inches="tight")
+    figure_table.savefig(f"{str(export_directory)}/inharmonicity_table.pdf", format="pdf", dpi=300, bbox_inches="tight")
