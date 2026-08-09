@@ -21,7 +21,12 @@ def sanitize(wav_directory: Path) -> (int, Path):
     export_directory = export_parent_directory / f"experiment_{iteration.zfill(3)}"
     export_directory.mkdir(parents=True, exist_ok=True)
 
+    experiment_number = str(export_directory).split("\\")[-1]
+
     count = 0
+
+    processed_directory = import_directory / "processed" / experiment_number
+    processed_directory.mkdir(parents=True, exist_ok=True)
 
     for file in import_directory.iterdir():
         if file.suffix == ".wav":
@@ -55,6 +60,8 @@ def sanitize(wav_directory: Path) -> (int, Path):
 
             sio.wavfile.write(export_directory / f"{file.stem}_sanitized.wav", SAMPLE_RATE,
                               windowed_signal.astype(np.float32))
+
+            file.replace(processed_directory / file.name)
             count += 1
 
     return count, export_directory
