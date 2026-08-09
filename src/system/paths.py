@@ -11,3 +11,8 @@ def get_project_root() -> Path:
         raise FileNotFoundError(f"Top of file system reached without finding files: {' ,'.join(file_targets)}")
 
     return root_dir
+
+
+def get_folder_iteration(directory: Path) -> int:
+    directories = [folder for folder in directory.iterdir() if folder.is_dir()]
+    return len(directories) + 1
