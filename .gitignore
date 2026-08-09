@@ -1,7 +1,6 @@
 # Artifacts
 *.wav
 *.pdf
-!artifacts/paper_artifacts/*.pdf
 wav_files/raw/peaks/
 wav_files/sanitized/peaks/
 
