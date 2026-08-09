@@ -2,7 +2,7 @@ wav_files/raw/*.wav
 wav_files/sanitized/*.wav
 wav_files/raw/peaks/
 wav_files/sanitized/peaks/
-plots/*.pdf
+artifacts/*.pdf
 
 __pycache__/
 *.py[cod]
