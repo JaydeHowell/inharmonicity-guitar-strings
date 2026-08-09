@@ -9,11 +9,17 @@ from inharmonicity.constants import (
     BUFFER,
     WINDOW_SIZE,
 )
+from system.paths import get_folder_iteration
 
 
-def sanitize(wav_directory: Path) -> int:
+def sanitize(wav_directory: Path) -> (int, Path):
     import_directory = wav_directory / "raw"
-    export_directory = wav_directory / "sanitized"
+    export_parent_directory = wav_directory / "sanitized"
+
+    iteration = str(get_folder_iteration(export_parent_directory))
+
+    export_directory = export_parent_directory / f"experiment_{iteration.zfill(3)}"
+    export_directory.mkdir(parents=True, exist_ok=True)
 
     count = 0
 
@@ -51,4 +57,4 @@ def sanitize(wav_directory: Path) -> int:
                               windowed_signal.astype(np.float32))
             count += 1
 
-    return count
+    return count, export_directory

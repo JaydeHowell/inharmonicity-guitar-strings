@@ -13,10 +13,8 @@ from inharmonicity.constants import (
 )
 
 
-def get_fft(wav_directory: Path, window_size) -> list[dict]:
+def get_fft(processing_directory: Path, window_size) -> list[dict]:
     freq_table = []
-
-    processing_directory = wav_directory / "sanitized"
 
     for file in processing_directory.iterdir():
         if file.suffix == ".wav":

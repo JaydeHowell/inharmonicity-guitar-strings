@@ -12,11 +12,11 @@ def main():
 
     wav_directory.mkdir(exist_ok=True)
 
-    processed_count = sanitize(wav_directory)
+    processed_count, export_directory = sanitize(wav_directory)
 
     print(f"Processed {processed_count} files")
 
-    frequency_data = get_fft(wav_directory, WINDOW_SIZE)
+    frequency_data = get_fft(export_directory, WINDOW_SIZE)
 
     plot_frequencies(frequency_data)
 
